@@ -334,6 +334,79 @@
             margin-top: 0;
         }
 
+
+        /* Melhorias UX */
+        .category-badge {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            user-select: none;
+            transition: background 0.2s;
+        }
+        .category-badge:hover {
+            filter: brightness(1.1);
+        }
+        .category-badge i.chevron {
+            transition: transform 0.3s ease;
+        }
+        .category-badge.collapsed i.chevron {
+            transform: rotate(-90deg);
+        }
+        .category-content {
+            transition: max-height 0.3s ease-out, opacity 0.2s ease;
+            overflow: hidden;
+        }
+        .category-content.collapsed {
+            max-height: 0;
+            opacity: 0;
+            margin-bottom: 0;
+            display: none;
+        }
+        
+        @keyframes pulse-cart {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        .pulse {
+            animation: pulse-cart 0.4s ease-in-out;
+        }
+
+        .order-item-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.25rem;
+        }
+        .order-item-actions .btn-sm {
+            padding: 0.1rem 0.5rem;
+            font-size: 0.9rem;
+            line-height: 1.2;
+        }
+        
+        .clear-all-btn {
+            background-color: var(--danger-color);
+            color: white;
+            border: none;
+            padding: 0.6rem 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+            width: 100%;
+        }
+        .clear-all-btn:hover {
+            background-color: #b91c1c;
+            transform: translateY(-1px);
+        }
+
         /* ===== PRODUCT CARD ===== */
         .product-item {
             background: white;
@@ -779,6 +852,111 @@
             }
         }
 
+
+        /* Upgrades: Nome do Comprador e Modal */
+        .buyer-section {
+            background: white;
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .buyer-section label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+        .buyer-section input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+        .buyer-section input:focus {
+            outline: none;
+            border-color: var(--primary-light);
+        }
+        .buyer-section input.error {
+            border-color: var(--danger-color);
+            background-color: #fef2f2;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 1rem;
+        }
+        .modal-content {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 16px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            animation: slideUp 0.3s ease-out;
+        }
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .modal-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+        .modal-options {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .modal-option {
+            flex: 1;
+            padding: 0.75rem;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .modal-option.active {
+            border-color: var(--primary-color);
+            background: var(--primary-color);
+            color: white;
+        }
+        .delivery-notes-area {
+            display: none;
+            margin-top: 1rem;
+        }
+        .delivery-notes-area textarea {
+            width: 100%;
+            height: 100px;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            resize: none;
+        }
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
         /* ===== SCROLLBAR ===== */
         ::-webkit-scrollbar {
             width: 8px;
@@ -849,6 +1027,13 @@
             <!-- Main Content (Mobile: full width, Desktop: 9 cols) -->
             <div class="col-12 col-lg-9 order-lg-1">
                 <!-- Products List -->
+                
+                <!-- Buyer Name -->
+                <div class="buyer-section">
+                    <label for="comprador"><i class="bi bi-person-badge"></i> Nome do Comprador (Obrigatório)</label>
+                    <input type="text" id="comprador" placeholder="Digite seu nome completo..." required>
+                </div>
+
                 <div id="lista">
                     <!-- Products will be inserted here -->
                 </div>
@@ -867,7 +1052,7 @@
                             <button class="action-btn btn-clear" onclick="limpar()">
                                 <i class="bi bi-trash"></i> <span>Limpar</span>
                             </button>
-                            <button class="action-btn btn-send" onclick="enviar()">
+                            <button class="action-btn btn-send" onclick="openDeliveryModal()">
                                 <i class="bi bi-whatsapp"></i> <span>Enviar</span>
                             </button>
                         </div>
@@ -887,10 +1072,50 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        let produtos = [], lojas = [], qtd = {}, modo = "todos", hold = null;
+        let produtos = [], lojas = [], qtd = {}, modo = "todos", hold = null, collapsedCats = {};
+
+
+        function toggleCat(catName) {
+            collapsedCats[catName] = !collapsedCats[catName];
+            render();
+            document.getElementById("comprador").addEventListener("input", saveState);
+        }
+
+        function pulseCart() {
+            const cart = document.getElementById("floatingCart");
+            if (!cart) return;
+            cart.classList.remove("pulse");
+            void cart.offsetWidth;
+            cart.classList.add("pulse");
+        }
+
+        function saveState() {
+            localStorage.setItem('yumeji_cart', JSON.stringify(qtd));
+            localStorage.setItem('yumeji_buyer', document.getElementById('comprador').value);
+        }
+
+        function loadState() {
+            const saved = localStorage.getItem('yumeji_cart');
+            if (saved) {
+                try {
+                    qtd = JSON.parse(saved);
+                    document.getElementById('comprador').value = localStorage.getItem('yumeji_buyer') || '';
+                } catch(e) { console.error(e); }
+            }
+        }
+
+        function limparTudo() {
+            if (confirm("Deseja realmente limpar todo o pedido?")) {
+                qtd = {};
+                saveState();
+                render();
+                showToast("Pedido limpo");
+            }
+        }
 
         // Initialize
         async function init() {
+            loadState();
             try {
                 // Load products
                 produtos = [
@@ -1027,39 +1252,45 @@
         }
 
         // Render products
+        
         function render() {
             const termo = document.getElementById("busca").value.toLowerCase();
             const lista = document.getElementById("lista");
             lista.innerHTML = "";
 
-            let cat = "", totalVol = 0, itemCount = 0;
+            const hasItems = Object.values(qtd).some(v => v > 0);
+            if (hasItems && modo === "todos" && !termo) {
+                const clearBtn = document.createElement("button");
+                clearBtn.className = "clear-all-btn";
+                clearBtn.innerHTML = '<i class="bi bi-trash"></i> Limpar Todo o Pedido';
+                clearBtn.onclick = limparTudo;
+                lista.appendChild(clearBtn);
+            }
+
+            let cat = "", currentCatContent = null;
 
             produtos.forEach(p => {
                 const q = qtd[p.codigo] || 0;
-
                 if (!p.descricao.toLowerCase().includes(termo) && !p.codigo.includes(termo)) return;
                 if (modo === "sel" && q === 0) return;
 
-                // Add category header
                 if (p.categoria !== cat) {
                     cat = p.categoria;
+                    const isCollapsed = collapsedCats[cat] || false;
                     const categoryDiv = document.createElement("div");
-                    categoryDiv.className = "category-badge";
-                    categoryDiv.innerHTML = `<i class="bi bi-tag"></i> ${cat}`;
+                    categoryDiv.className = "category-badge" + (isCollapsed ? " collapsed" : "");
+                    categoryDiv.innerHTML = `<span><i class="bi bi-tag"></i> ${cat}</span><i class="bi bi-chevron-down chevron"></i>`;
+                    categoryDiv.onclick = () => toggleCat(p.categoria);
                     lista.appendChild(categoryDiv);
+                    
+                    currentCatContent = document.createElement("div");
+                    currentCatContent.className = "category-content" + (isCollapsed ? " collapsed" : "");
+                    lista.appendChild(currentCatContent);
                 }
 
-                if (q > 0) totalVol += q;
-
-                // Add product item
                 const itemDiv = document.createElement("div");
                 itemDiv.className = `product-item ${q > 0 ? "selected" : ""}`;
-                
-                const linkHtml = p.link ? `
-                    <a href="${p.link}" target="_blank" class="view-link-btn" title="Ver produto">
-                        <i class="bi bi-eye"></i>
-                    </a>
-                ` : "";
+                const linkHtml = p.link ? `<a href="${p.link}" target="_blank" class="view-link-btn"><i class="bi bi-eye"></i></a>` : "";
 
                 itemDiv.innerHTML = `
                     <div class="product-info-wrapper">
@@ -1070,78 +1301,70 @@
                         ${linkHtml}
                     </div>
                     <div class="quantity-control">
-                        <button class="qty-btn minus" onmousedown="segurar('${p.codigo}')" onmouseup="parar()" ontouchstart="segurar('${p.codigo}')" ontouchend="parar()" onclick="menos('${p.codigo}')">−</button>
+                        <button class="qty-btn minus" onclick="menos('${p.codigo}')">−</button>
                         <div class="qty-display">${q}</div>
                         <button class="qty-btn plus" onclick="mais('${p.codigo}')">+</button>
                     </div>
                 `;
-                lista.appendChild(itemDiv);
+                currentCatContent.appendChild(itemDiv);
             });
 
-            // Check if there are results
             if (lista.children.length === 0) {
-                lista.innerHTML = `
-                    <div class="empty-state">
-                        <i class="bi bi-search"></i>
-                        <p>Nenhum produto encontrado</p>
-                    </div>
-                `;
+                lista.innerHTML = '<div class="empty-state"><i class="bi bi-search"></i><p>Nenhum produto encontrado</p></div>';
             }
-
-            // Update summary (removed from sidebar)
-
-            // Update order review
             updateOrderReview();
-
-            // Update floating cart
             updateFloatingCart();
         }
 
-        // Update order review section
-        function updateOrderReview() {
-            const itemCount = Object.values(qtd).filter(v => v > 0).length;
-            const orderReview = document.getElementById("orderReview");
 
-            if (itemCount === 0) {
+        // Update order review section
+        
+        function updateOrderReview() {
+            const items = produtos.filter(p => (qtd[p.codigo] || 0) > 0);
+            const orderReview = document.getElementById("orderReview");
+            if (items.length === 0) {
                 orderReview.style.display = "none";
                 updateFloatingCart();
                 return;
             }
-
             orderReview.style.display = "block";
-
             const painel = document.getElementById("painel");
-            let html = "";
-
-            let i = 0;
             let totalVol = 0;
-            produtos.forEach(p => {
-                if (qtd[p.codigo] > 0) {
-                    totalVol += qtd[p.codigo];
-                    html += `
-                        <div class="order-item">
+            let html = items.map(p => {
+                totalVol += qtd[p.codigo];
+                return `
+                    <div class="order-item">
+                        <div class="order-item-info">
                             <div class="order-item-code">${p.codigo}</div>
                             <div class="order-item-desc">${p.descricao}</div>
-                            <div class="order-item-qty">${qtd[p.codigo]} ${p.embalagem}</div>
+                            <div class="order-item-actions" style="background: var(--light-bg); padding: 0.2rem; border-radius: 6px; display: inline-flex; gap: 0.35rem;">
+                                <button class="qty-btn minus" style="width: 28px; height: 28px; font-size: 0.9rem;" onclick="menos(\'${p.codigo}\')">−</button>
+                                <span class="mx-2"><strong>${qtd[p.codigo]}</strong> ${p.embalagem}</span>
+                                <button class="qty-btn plus" style="width: 28px; height: 28px; font-size: 0.9rem;" onclick="mais(\'${p.codigo}\')">+</button>
+                            </div>
                         </div>
-                    `;
-                    i++;
-                }
-            });
-
-            html += `<div class="order-summary">Total: ${i} item${i > 1 ? "s" : ""} | Volumes: ${totalVol}</div>`;
-            painel.innerHTML = html;
+                    </div>
+                `;
+            }).join("");
+            painel.innerHTML = html + `<div class="order-summary">Total: ${items.length} item(s) | Volumes: ${totalVol}</div>`;
         }
+
 
         // Quantity functions
         function mais(c) {
             qtd[c] = (qtd[c] || 0) + 1;
+            pulseCart();
+            saveState();
             render();
         }
 
         function menos(c) {
-            if (qtd[c]) qtd[c]--;
-            render();
+            if (qtd[c] > 0) {
+                qtd[c]--;
+                pulseCart();
+                saveState();
+                render();
+            }
         }
 
         function segurar(c) {
@@ -1171,33 +1394,130 @@
             return "YU" + String(d.getDate()).padStart(2, "0") + String(d.getMonth() + 1).padStart(2, "0") + d.getFullYear().toString().slice(2) + "-" + String(d.getHours()).padStart(2, "0") + String(d.getMinutes()).padStart(2, "0");
         }
 
+        
+        
+        
+
+        let deliveryOption = false;
+
+        function setDeliveryOption(val) {
+            deliveryOption = val;
+            document.getElementById('optSim').classList.toggle('active', val);
+            document.getElementById('optNao').classList.toggle('active', !val);
+            document.getElementById('deliveryNotesArea').style.display = val ? 'block' : 'none';
+            if (val) document.getElementById('deliveryNotes').focus();
+        }
+
+        function openDeliveryModal() {
+            const comprador = document.getElementById("comprador");
+            if (!comprador.value.trim()) {
+                comprador.classList.add("error");
+                comprador.focus();
+                showToast("Por favor, informe seu nome", "error");
+                return;
+            }
+            comprador.classList.remove("error");
+            
+            document.getElementById("deliveryModal").style.display = "flex";
+            setDeliveryOption(false);
+        }
+
+        function closeDeliveryModal() {
+            document.getElementById("deliveryModal").style.display = "none";
+        }
+
+        function confirmAndSend() {
+            const msg = montar();
+            if (msg) {
+                window.open("https://wa.me/5515997094000?text=" + encodeURIComponent(msg));
+                showToast("Pedido enviado com sucesso!");
+                closeDeliveryModal();
+            }
+        }
+
+        
         // Build message
         function montar() {
             const lojaSelect = document.getElementById("loja");
+            const comprador = document.getElementById("comprador").value.trim();
+            
             if (!lojaSelect.value) {
                 showToast("Selecione uma loja", "error");
                 return null;
             }
+            if (!comprador) {
+                showToast("Informe o nome do comprador", "error");
+                return null;
+            }
 
-            let msg = `*Pedido* Nº: ${gerarNumero()}\n`;
-            msg += `Loja: ${lojaSelect.value}\n\n*Itens*\n`;
+            const numPedido = gerarNumero();
+            const dataHora = new Date().toLocaleString('pt-BR');
 
-            let total = 0;
+            let msg = `*NOVO PEDIDO: (${lojaSelect.value.split(' - ')[0]}) YUMEJI*
+`;
+            msg += `*Nº:* ${numPedido}
+`;
+            msg += `*COMPRADOR:* ${comprador}
+
+`;
+
+            let totalItens = 0;
+            let totalVolumes = 0;
+            let currentCat = "";
+
             produtos.forEach(p => {
-                if (qtd[p.codigo] > 0) {
-                    total++;
-                    msg += `${p.codigo} - ${p.descricao} = ${qtd[p.codigo]} ${p.embalagem}\n`;
+                const q = qtd[p.codigo] || 0;
+                if (q > 0) {
+                    if (p.categoria !== currentCat) {
+                        currentCat = p.categoria;
+                        msg += `
+> *${currentCat.toUpperCase()}*
+`;
+                    }
+                    totalItens++;
+                    totalVolumes += q;
+                    msg += `- [${p.codigo}] *x ${q} (${p.embalagem})* ${p.descricao}
+`;
                 }
             });
 
             const extra = document.getElementById("extra").value;
             if (extra) {
-                msg += `\n*OBSERVAÇÕES OU FALTAS*\n${extra}\n`;
+                msg += `
+*OBSERVAÇÕES OU FALTAS:*
+${extra}
+`;
             }
 
-            msg += `\n---------------\n*TOTAL DE ITENS:* ${total}`;
+            // Notas de entrega do questionário
+            if (deliveryOption) {
+                const deliveryNotes = document.getElementById("deliveryNotes").value.trim();
+                if (deliveryNotes) {
+                    msg += `
+*ENTREGA/LOCAL:*
+${deliveryNotes}
+`;
+                }
+            }
+
+            msg += `
+--------------------------
+`;
+            msg += `*RESUMO:*
+`;
+            msg += `*Total de Itens:* ${totalItens}
+`;
+            msg += `*Total de Volumes:* ${totalVolumes}
+
+`;
+            msg += `*Gerado em:* ${dataHora}`;
+
             return msg;
         }
+
+
+
+
 
         // Send order
         function enviar() {
@@ -1278,11 +1598,68 @@
             }, 3000);
         }
 
+
+        function toggleCat(catName) {
+            collapsedCats[catName] = !collapsedCats[catName];
+            render();
+        }
+
+        function pulseCart() {
+            const cart = document.getElementById("floatingCart");
+            if (!cart) return;
+            cart.classList.remove("pulse");
+            void cart.offsetWidth;
+            cart.classList.add("pulse");
+        }
+
+        function saveState() {
+            localStorage.setItem('yumeji_cart', JSON.stringify(qtd));
+            localStorage.setItem('yumeji_buyer', document.getElementById('comprador').value);
+        }
+
+        function loadState() {
+            const saved = localStorage.getItem('yumeji_cart');
+            if (saved) {
+                try {
+                    qtd = JSON.parse(saved);
+                    document.getElementById('comprador').value = localStorage.getItem('yumeji_buyer') || '';
+                } catch(e) { console.error(e); }
+            }
+        }
+
+        function limparTudo() {
+            if (confirm("Deseja realmente limpar todo o pedido?")) {
+                qtd = {};
+                saveState();
+                render();
+                showToast("Pedido limpo");
+            }
+        }
+
         // Initialize on load
         document.addEventListener("DOMContentLoaded", init);
 
         // Update floating cart on page load
         window.addEventListener("load", updateFloatingCart);
     </script>
+
+    <!-- Delivery Questionnaire Modal -->
+    <div id="deliveryModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-title">Alguma observação quanto ao horário de recebimento ou local de entrega?</div>
+            <div class="modal-options">
+                <div class="modal-option" id="optNao" onclick="setDeliveryOption(false)">Não</div>
+                <div class="modal-option" id="optSim" onclick="setDeliveryOption(true)">Sim</div>
+            </div>
+            <div id="deliveryNotesArea" class="delivery-notes-area">
+                <textarea id="deliveryNotes" placeholder="Descreva aqui as observações de entrega..."></textarea>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-secondary" onclick="closeDeliveryModal()">Cancelar</button>
+                <button class="btn btn-primary" onclick="confirmAndSend()">Finalizar e Enviar</button>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
